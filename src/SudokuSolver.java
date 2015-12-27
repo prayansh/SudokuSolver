@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * Created 0y Prayansh on 2015-12-25.
  */
@@ -33,12 +35,36 @@ public class SudokuSolver {
             63, 64, 65, 66, 67, 68, 69, 70, 71,
             72, 73, 74, 75, 76, 77, 78, 79, 80
     };
+    static int[] B3 = {
+            5, 0, 0, 0, 0, 4, 0, 7, 0,
+            0, 1, 0, 0, 5, 0, 6, 0, 0,
+            0, 0, 4, 9, 0, 0, 0, 0, 0,
+            0, 9, 0, 0, 0, 7, 5, 0, 0,
+            1, 8, 0, 2, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 6, 0, 0, 0,
+            0, 0, 3, 0, 0, 0, 0, 0, 8,
+            0, 6, 0, 0, 8, 0, 0, 0, 9,
+            0, 0, 8, 0, 7, 0, 0, 3, 1};
+    static int[] B4 = {
+            0, 0, 5, 3, 0, 0, 0, 0, 0,
+            8, 0, 0, 0, 0, 0, 0, 2, 0,
+            0, 7, 0, 0, 1, 0, 5, 0, 0,
+            4, 0, 0, 0, 0, 5, 3, 0, 0,
+            0, 1, 0, 0, 7, 0, 0, 0, 6,
+            0, 0, 3, 2, 0, 0, 0, 8, 0,
+            0, 6, 0, 5, 0, 0, 0, 0, 9,
+            0, 0, 4, 0, 0, 0, 0, 3, 0,
+            0, 0, 0, 0, 0, 9, 7, 0, 0};//Hardest
 
 
     public static void main(String[] args) {
-        Solver s = new Solver(B1);
+        Solver s = new Solver(B4);
         System.out.println(s.getB());
-        System.out.println("============== Solution ===============n");
+        System.out.println("============== Solution ===============");
+        long cur = System.currentTimeMillis();
         System.out.println(s.solve());
+        long now = System.currentTimeMillis();
+        System.out.println("Time : " + (now - cur));
+//        ArrayList<Board> solutions = s.produceAllSolutions();
     }
 }

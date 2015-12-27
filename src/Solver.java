@@ -6,6 +6,9 @@ import java.util.ArrayList;
 public class Solver {
     private Board b;
 
+    /**
+     * Initialise the board with blank values
+     */
     public Solver() {
         b = new Board(81);
         for (int i = 0; i < b.size(); i++) {
@@ -13,10 +16,18 @@ public class Solver {
         }
     }
 
+    /**
+     * Initialise the board as a ArrayList
+     * @param board
+     */
     public Solver(ArrayList<Integer> board) {
         b = new Board(board);
     }
 
+    /**
+     *
+     * @param board
+     */
     public Solver(Integer[][] board) {
         b = new Board();
         if ((board.length * board[0].length) == 81)
@@ -46,6 +57,10 @@ public class Solver {
             System.out.println("Wrong Input");
     }
 
+    /**
+     * Solve the given board with generative tree algorithm
+     * @return solved board
+     */
     public Board solve() {
         ArrayList<Board> todo = new ArrayList<>();
         todo.add(b);
@@ -64,6 +79,31 @@ public class Solver {
     }
 
     /**
+     * Solve the given board with generative tree algorithm
+     * @return all possible solutions
+     */
+    public ArrayList<Board> produceAllSolutions() {
+        ArrayList<Board> todo = new ArrayList<>();
+        ArrayList<Board> rsf = new ArrayList<>();
+        todo.add(b);
+        while (!todo.isEmpty()) {
+            Board cur = todo.get(0);
+            todo.remove(cur);
+//            System.out.println(cur);
+            if (cur.solved()) {
+                rsf.add(cur);
+                continue;
+            }
+            todo = append(nextBoards(cur), todo);
+        }
+        if (rsf.isEmpty()) {
+            rsf.add(b);
+            System.out.println("No Solution Found");
+        }
+        return rsf;
+    }
+
+    /**
      * Produce the next boards
      * Also filter out all invalid boards
      *
@@ -75,7 +115,7 @@ public class Solver {
         ArrayList<Board> result = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
             //cur.set(index, i);// replace index value with i in new board
-            result.add(newBoard(index,i,cur));
+            result.add(newBoard(index, i, cur));
         }
         result.removeIf(board -> !board.valid());
         return result;
@@ -83,6 +123,7 @@ public class Solver {
 
     /**
      * Produce a new board by replacing the index with the given value for the board
+     *
      * @param index
      * @param value
      * @param cur
@@ -90,8 +131,8 @@ public class Solver {
      */
     private Board newBoard(int index, int value, Board cur) {
         Board res = new Board();
-        for(int i=0;i<cur.size();i++){
-            if(i==index)
+        for (int i = 0; i < cur.size(); i++) {
+            if (i == index)
                 res.add(value);
             else
                 res.add(cur.get(i));
@@ -99,6 +140,11 @@ public class Solver {
         return res;
     }
 
+    /**
+     * Produce the first blank cell in the board
+     * @param cur - the board in context
+     * @return the first blank cell
+     */
     private int firstBlank(Board cur) {
         for (int i = 0; i < cur.size(); i++) {
             if (cur.get(i) == 0)
@@ -111,8 +157,8 @@ public class Solver {
      * Appends l1 to l2 with l1 being first
      * !!!! TESTED DO NOT CHANGE !!!!
      *
-     * @param l1
-     * @param l2
+     * @param l1 - list 1
+     * @param l2 - list 2
      * @return (append (list 1) (list 2)) -> (list 1 2)
      */
     public static ArrayList<Board> append(ArrayList<Board> l1, ArrayList<Board> l2) {

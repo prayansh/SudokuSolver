@@ -10,6 +10,9 @@ public class Board extends ArrayList<Integer> {
     // A cell on the board is [0,9]
     // where 0 represents blank cell
 
+    /**
+     * ROW, COL, BOX contain units that have to be unique in order for the board to be valid
+     */
     public static final int[][] ROW = {
             {0, 1, 2, 3, 4, 5, 6, 7, 8},
             {9, 10, 11, 12, 13, 14, 15, 16, 17},
@@ -60,37 +63,45 @@ public class Board extends ArrayList<Integer> {
      * Function to check if board is valid or not
      */
     public boolean valid() {
-        for (int i = 0; i < ROW.length; i++) {
-            if (duplicates(mapUnit(ROW[i])))
+        for (int i = 0; i < this.size(); i++) {
+            if (this.get(i) < 0 || this.get(i) > 9)
                 return false;
         }
-        for (int i = 0; i < COL.length; i++) {
-            if (duplicates(mapUnit(COL[i])))
-                return false;
-        }
-        for (int i = 0; i < BOX.length; i++) {
-            if (duplicates(mapUnit(BOX[i])))
+        for (int i = 0; i < 9; i++) {
+            if (duplicates(mapUnit(ROW[i])) || duplicates(mapUnit(COL[i])) || duplicates(mapUnit(BOX[i])))
                 return false;
         }
         return true;
     }
 
+    /**
+     * Check if any duplicates in the given list
+     * Can be made abstract for any definition by changing
+     * @param integers
+     * @return true if duplicates found else false
+     */
     private boolean duplicates(ArrayList<Integer> integers) {
         while (!integers.isEmpty()) {
             int cur = integers.get(0);
             integers.remove(0);
-            if (cur == 0)
-                continue;
             if (integers.contains(cur))
                 return true;
         }
         return false;
     }
 
+    /**
+     * Create a list of Cell Values by mapping the indices of the current board
+     * @param ints
+     * @return
+     */
     private ArrayList<Integer> mapUnit(int[] ints) {
         ArrayList<Integer> res = new ArrayList<>();
-        for (int i = 0; i < ints.length; i++)
-            res.add(this.get(ints[i]));
+        for (int i = 0; i < ints.length; i++) {
+            if (this.get(ints[i]) != 0)
+                res.add(this.get(ints[i]));
+        }
+
         return res;
     }
 
